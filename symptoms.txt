@@ -1,0 +1,15 @@
+secrecion_nasal
+secrecion_ocular
+jadeo
+espasmos
+rigidez
+tos
+estornudos
+plumas_erizadas
+fiebre
+diarrea
+infeccion_bolsa_fabricio
+contracciones_cuello
+falta_apetito
+inflamacion_cara
+sensibilidad_luz
