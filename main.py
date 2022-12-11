@@ -1,136 +1,181 @@
-# $ sudo pip3 install experta
-# $ sudo pip3 install networkx
-# $ sudo pip3 install matplotlib
+"""
+ sudo pip3 install networkx
+ sudo pip3 install experta
+ sudo pip3 install matplotlib
+ 
+ La libreria 'experta'  está hecha para hacer sistemas expertos, está inspirado en el lenguaje CLIPS creado por la NASA.
+ 
+ Funciona con únicamente con las versiones 3.5, 3.6, 3.7, 3.8
+ 
+ Experta is a Python library for building expert systems strongly inspired by CLIPS.
+"""
+
 
 from experta import *
 import ast
 
 
 class MedicalExpert(KnowledgeEngine):
-    username = ("",)
+    nombre_usuario = ("",)
 
     @DefFacts()
     def needed_data(self):
         """
-        Método que es llamado cada vez que engine.reset() is llamado.
+        Método que es llamado cada vez que engine.reset() es llamado.
         Funciona como constructor de esta clase.
         """
-        yield Fact(findDisease="true")
+        yield Fact(findEnfermedad="true")
         print(
-            "Bienvenido al sistema experto de enfermedades en aves ponedoras\n\nA continuación te haré unas cuantas preguntas:\n\n"
+            """
+Bienvenido al sistema experto de enfermedades en aves ponedoras
+A continuación te haré unas cuantas preguntas:
+"""
         )
 
-    @Rule(Fact(findDisease="true"), NOT(Fact(name=W())), salience=1000)
-    def ask_name(self):
-        self.username = input("Introduzca el nombre del usuario:\n")
-        self.declare(Fact(name=self.username))
+    # Regla que guarda el como hecho el nombre del usuario del sistema
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(nombre=W())), salience=1000)
+    def preguntar_nombre(self):
+        self.nombre_usuario = input("Introduzca el nombre del usuario:\n")
+        self.declare(Fact(nombre=self.nombre_usuario))
 
     # Encontrar sintoma secrecion_nasal
-    
-    @Rule(Fact(findDisease="true"), NOT(Fact(secrecion_nasal=W())), salience=995)
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(secrecion_nasal=W())), salience=995)
     def tienesecrecion_nasal(self):
-        self.secrecion_nasal = input("\nDo you have secrecion_nasal?\nPor favor introduzca si/no\n")
+        self.secrecion_nasal = input(
+            "\nTiene secrecion nasal?\nPor favor introduzca si/no\n"
+        )
         self.secrecion_nasal = self.secrecion_nasal.lower()
         self.declare(Fact(secrecion_nasal=self.secrecion_nasal.strip().lower()))
 
     # Encontrar sintoma secrecion_ocular
-    @Rule(Fact(findDisease="true"), NOT(Fact(secrecion_ocular=W())), salience=985)
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(secrecion_ocular=W())), salience=985)
     def tienesecrecion_ocular(self):
-        self.secrecion_ocular = input("\nDo you have secrecion_ocular?\nPor favor introduzca si/no\n")
+        self.secrecion_ocular = input(
+            "\nTiene secrecion ocular?\nPor favor introduzca si/no\n"
+        )
         self.secrecion_ocular = self.secrecion_ocular.lower()
         self.declare(Fact(secrecion_ocular=self.secrecion_ocular.strip().lower()))
 
     # Encontrar sintoma jadeo
-    @Rule(Fact(findDisease="true"), NOT(Fact(jadeo=W())), salience=975)
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(jadeo=W())), salience=975)
     def tienejadeo(self):
-        self.jadeo = input("\nDo you jadeo?\nPor favor introduzca si/no\n")
+        self.jadeo = input("\nTiene jadeo?\nPor favor introduzca si/no\n")
         self.jadeo = self.jadeo.lower()
         self.declare(Fact(jadeo=self.jadeo.strip().lower()))
-    
+
     # Encontrar sintoma espasmos
-    @Rule(Fact(findDisease="true"), NOT(Fact(espasmos=W())), salience=970)
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(espasmos=W())), salience=970)
     def tieneespasmos(self):
-        self.espasmos = input("\nDo you experience espasmos occasionally?\nPor favor introduzca si/no\n")
+        self.espasmos = input("\nTiene espasmos?\nPor favor introduzca si/no\n")
         self.espasmos = self.espasmos.lower()
         self.declare(Fact(espasmos=self.espasmos.strip().lower()))
 
-    @Rule(Fact(findDisease="true"), NOT(Fact(rigidez=W())), salience=965)
+    # Encontrar sintoma rigidez
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(rigidez=W())), salience=965)
     def tienerigidez(self):
-        self.rigidez = input("\nDo you experience rigidez?\nPor favor introduzca si/no\n")
+        self.rigidez = input("\nTiene rigidez?\nPor favor introduzca si/no\n")
         self.rigidez = self.rigidez.lower()
         self.declare(Fact(rigidez=self.rigidez.strip().lower()))
 
-
-    @Rule(Fact(findDisease="true"), NOT(Fact(tos=W())), salience=955)
+    # Encontrar sintoma tos
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(tos=W())), salience=955)
     def tienetos(self):
-        self.tos = input("\nDo you experience tos?\nPor favor introduzca si/no\n")
+        self.tos = input("\nTiene tos?\nPor favor introduzca si/no\n")
         self.tos = self.tos.lower()
         self.declare(Fact(tos=self.tos.strip().lower()))
 
-    @Rule(Fact(findDisease="true"), NOT(Fact(estornudos=W())), salience=950)
+    # Encontrar sintoma estornudos
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(estornudos=W())), salience=950)
     def tieneestornudos(self):
-        self.estornudos = input("\nDo you experience estornudos?\nPor favor introduzca si/no\n")
+        self.estornudos = input("\nDetecta estornudos?\nPor favor introduzca si/no\n")
         self.estornudos = self.estornudos.lower()
         self.declare(Fact(estornudos=self.estornudos.strip().lower()))
 
-    @Rule(Fact(findDisease="true"), NOT(Fact(plumas_erizadas=W())), salience=945)
+    # Encontrar sintoma plumas_erizadas
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(plumas_erizadas=W())), salience=945)
     def tieneplumas_erizadas(self):
-        self.plumas_erizadas = input("\nDo you experience plumas_erizadas?\nPor favor introduzca si/no\n")
+        self.plumas_erizadas = input(
+            "\nTiene plumas erizadas?\nPor favor introduzca si/no\n"
+        )
         self.plumas_erizadas = self.plumas_erizadas.lower()
         self.declare(Fact(plumas_erizadas=self.plumas_erizadas.strip().lower()))
 
-    @Rule(Fact(findDisease="true"), NOT(Fact(fiebre=W())), salience=940)
+    # Encontrar sintoma fiebre
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(fiebre=W())), salience=940)
     def tienefiebre(self):
-        self.fiebre = input(
-            "\nDo you experience sore fiebre?\nPor favor introduzca si/no\n")
+        self.fiebre = input("\nTiene  fiebre?\nPor favor introduzca si/no\n")
         self.fiebre = self.fiebre.lower()
         self.declare(Fact(fiebre=self.fiebre.strip().lower()))
 
-    @Rule(Fact(findDisease="true"), NOT(Fact(diarrea=W())), salience=935)
+    # Encontrar sintoma diarrea
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(diarrea=W())), salience=935)
     def tienediarrea(self):
-        self.diarrea = input(
-            "\nDo you experience diarrea?\nPor favor introduzca si/no\n")
+        self.diarrea = input("\nTiene diarrea?\nPor favor introduzca si/no\n")
         self.diarrea = self.diarrea.lower()
         self.declare(Fact(diarrea=self.diarrea.strip().lower()))
-        
-    @Rule(Fact(findDisease="true"), NOT(Fact(infeccion_bolsa_fabricio=W())), salience=930)
+
+    # Encontrar sintoma infección bolsa fabricio
+    @Rule(
+        Fact(findEnfermedad="true"), NOT(Fact(infeccion_bolsa_fabricio=W())), salience=930
+    )
     def tieneinfeccion_bolsa_fabricio(self):
         self.infeccion_bolsa_fabricio = input(
-            "\nDo you experience infeccion_bolsa_fabricio?\nPor favor introduzca si/no\n")
+            "\nTiene infeccion en la bolsa de fabricio?\nPor favor introduzca si/no\n"
+        )
         self.infeccion_bolsa_fabricio = self.infeccion_bolsa_fabricio.lower()
-        self.declare(Fact(infeccion_bolsa_fabricio=self.infeccion_bolsa_fabricio.strip().lower()))
-        
-    @Rule(Fact(findDisease="true"), NOT(Fact(contracciones_cuello=W())), salience=925)
+        self.declare(
+            Fact(infeccion_bolsa_fabricio=self.infeccion_bolsa_fabricio.strip().lower())
+        )
+
+    # Encontrar sintoma contracciones cuello
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(contracciones_cuello=W())), salience=925)
     def tienecontracciones_cuello(self):
         self.contracciones_cuello = input(
-            "\nDo you experience contracciones_cuello?\nPor favor introduzca si/no\n")
+            "\nTiene contracciones en el cuello?\nPor favor introduzca si/no\n"
+        )
         self.contracciones_cuello = self.contracciones_cuello.lower()
-        self.declare(Fact(contracciones_cuello=self.contracciones_cuello.strip().lower()))
-        
-    @Rule(Fact(findDisease="true"), NOT(Fact(falta_apetito=W())), salience=920)
+        self.declare(
+            Fact(contracciones_cuello=self.contracciones_cuello.strip().lower())
+        )
+
+    # Encontrar sintoma falta apetito
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(falta_apetito=W())), salience=920)
     def tienefalta_apetito(self):
         self.falta_apetito = input(
-            "\nDo you experience falta_apetito?\nPor favor introduzca si/no\n")
+            "\nTiene falta de apetito?\nPor favor introduzca si/no\n"
+        )
         self.falta_apetito = self.falta_apetito.lower()
         self.declare(Fact(falta_apetito=self.falta_apetito.strip().lower()))
-        
-    @Rule(Fact(findDisease="true"), NOT(Fact(inflamacion_cara=W())), salience=915)
+
+    # Encontrar sintoma inflamación cara
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(inflamacion_cara=W())), salience=915)
     def tieneinflamacion_cara(self):
         self.inflamacion_cara = input(
-            "\nDo you experience inflamacion_cara?\nPor favor introduzca si/no\n")
+            "\nTiene inflamacion en la cara?\nPor favor introduzca si/no\n"
+        )
         self.inflamacion_cara = self.inflamacion_cara.lower()
         self.declare(Fact(inflamacion_cara=self.inflamacion_cara.strip().lower()))
-        
-    @Rule(Fact(findDisease="true"), NOT(Fact(sensibilidad_luz=W())), salience=910)
+
+    # Encontrar sintoma sensibilidad luz
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(sensibilidad_luz=W())), salience=910)
     def tienesensibilidad_luz(self):
         self.sensibilidad_luz = input(
-            "\nDo you experience sensibilidad_luz?\nPor favor introduzca si/no\n")
+            "\nTiene sensibilidad a la luz?\nPor favor introduzca si/no\n"
+        )
         self.sensibilidad_luz = self.sensibilidad_luz.lower()
         self.declare(Fact(sensibilidad_luz=self.sensibilidad_luz.strip().lower()))
 
-    # Encontrar enfermedad 0
+    """
+    Encontrar enfermedad 0, Bronquitis Infecciosa
+    Sintomas: 
+    secrecion_nasal,secrecion_ocular,jadeo,tos    
+    
+    
+        {"Bronquitis Infecciosa": "secrecion_nasal,secrecion_ocular,jadeo,tos", "New Castle": "secrecion_nasal,espasmos,rigidez,tos,estornudos,diarrea,contracciones_cuello", "Influenza Aviar": "secrecion_nasal,secrecion_ocular,estornudos", "Gumboro": "plumas_erizadas,diarrea,infeccion_bolsa_fabricio,falta_apetito", "Coriza Infecciosa": "inflamacion_cara,secrecion_ocular,sensibilidad_luz", "Colera Aviar": "secrecion_nasal,plumas_erizadas,fiebre,diarrea,contracciones_cuello,falta_apetito"}
+    """
+
     @Rule(
-        Fact(findDisease="true"),
+        Fact(findEnfermedad="true"),
         Fact(secrecion_nasal="si"),
         Fact(secrecion_ocular="si"),
         Fact(jadeo="si"),
@@ -147,12 +192,19 @@ class MedicalExpert(KnowledgeEngine):
         Fact(inflamacion_cara="no"),
         Fact(sensibilidad_luz="no"),
     )
-    def disease_0(self):
-        self.declare(Fact(disease="Bronquitis Infecciosa"))
+    def Enfermedad_0(self):
+        self.declare(Fact(Enfermedad="Bronquitis Infecciosa"))
 
-    # Encontrar enfermedad 1
+    """ 
+        Encontrar enfermedad 1 New Castle
+        Sintomas:
+        secrecion_nasal,espasmos,rigidez,tos,
+        estornudos,diarrea,contracciones_cuello
+        
+    """
+
     @Rule(
-        Fact(findDisease="true"),
+        Fact(findEnfermedad="true"),
         Fact(secrecion_nasal="si"),
         Fact(secrecion_ocular="no"),
         Fact(jadeo="no"),
@@ -169,16 +221,21 @@ class MedicalExpert(KnowledgeEngine):
         Fact(inflamacion_cara="no"),
         Fact(sensibilidad_luz="no"),
     )
-    def disease_1(self):
-        self.declare(Fact(disease="New Castle"))
+    def Enfermedad_1(self):
+        self.declare(Fact(Enfermedad="New Castle"))
+
+    """ 
+        Encontrar enfermedad 2 Influenza Aviar": 
+        Sintomas:
+        secrecion_nasal,secrecion_ocular,estornudos
         
-    # Encontrar enfermedad 2
+    """
     @Rule(
-        Fact(findDisease="true"),
-        Fact(secrecion_nasal="no"),
-        Fact(secrecion_ocular="no"),
+        Fact(findEnfermedad="true"),
+        Fact(secrecion_nasal="si"),
+        Fact(secrecion_ocular="si"),
         Fact(jadeo="no"),
-        Fact(espasmos="si"),
+        Fact(espasmos="no"),
         Fact(rigidez="no"),
         Fact(tos="no"),
         Fact(estornudos="si"),
@@ -191,196 +248,228 @@ class MedicalExpert(KnowledgeEngine):
         Fact(inflamacion_cara="no"),
         Fact(sensibilidad_luz="no"),
     )
-    def disease_2(self):
-        self.declare(Fact(disease="Influenza Aviar"))
+    def Enfermedad_2(self):
+        self.declare(Fact(Enfermedad="Influenza Aviar"))
 
-    # Encontrar enfermedad 3
+    """ 
+        Encontrar enfermedad 3, Gumboro": 
+        Sintomas:
+        plumas_erizadas,diarrea,infeccion_bolsa_fabricio,falta_apetito
+        
+    """
     @Rule(
-        Fact(findDisease="true"),
+        Fact(findEnfermedad="true"),
         Fact(secrecion_nasal="no"),
         Fact(secrecion_ocular="no"),
         Fact(jadeo="no"),
-        Fact(espasmos="si"),
+        Fact(espasmos="no"),
+        Fact(rigidez="no"),
+        Fact(tos="no"),
+        Fact(estornudos="no"),
+        Fact(plumas_erizadas="si"),
+        Fact(fiebre="no"),
+        Fact(diarrea="si"),
+        Fact(infeccion_bolsa_fabricio="si"),
+        Fact(contracciones_cuello="no"),
+        Fact(falta_apetito="si"),
+        Fact(inflamacion_cara="no"),
+        Fact(sensibilidad_luz="no"),
+    )
+    def Enfermedad_3(self):
+        self.declare(Fact(Enfermedad="Gumboro"))
+
+    """ 
+        Encontrar enfermedad 4 Coriza Infecciosa:
+        Sintomas: 
+        inflamacion_cara,secrecion_ocular,sensibilidad_luz
+        
+    """
+    @Rule(
+        Fact(findEnfermedad="true"),
+        Fact(secrecion_nasal="no"),
+        Fact(secrecion_ocular="si"),
+        Fact(jadeo="no"),
+        Fact(espasmos="no"),
         Fact(rigidez="no"),
         Fact(tos="no"),
         Fact(estornudos="no"),
         Fact(plumas_erizadas="no"),
         Fact(fiebre="no"),
-        Fact(diarrea="si"),
-    )
-    def disease_3(self):
-        self.declare(Fact(disease="Gumboro"))
-
-    # Encontrar enfermedad 4
-    @Rule(
-        Fact(findDisease="true"),
-        Fact(secrecion_nasal="no"),
-        Fact(secrecion_ocular="no"),
-        Fact(jadeo="no"),
-        Fact(espasmos="no"),
-        Fact(rigidez="si"),
-        Fact(tos="no"),
-        Fact(estornudos="si"),
-        Fact(plumas_erizadas="no"),
-        Fact(fiebre="no"),
         Fact(diarrea="no"),
         Fact(infeccion_bolsa_fabricio="no"),
         Fact(contracciones_cuello="no"),
         Fact(falta_apetito="no"),
-        Fact(inflamacion_cara="no"),
-        Fact(sensibilidad_luz="no"),
+        Fact(inflamacion_cara="si"),
+        Fact(sensibilidad_luz="si"),
     )
-    def disease_4(self):
-        self.declare(Fact(disease="Coriza Infecciosa"))
+    def Enfermedad_4(self):
+        self.declare(Fact(Enfermedad="Coriza Infecciosa"))
 
-    # Encontrar enfermedad 5
+    """ 
+        Encontrar enfermedad 5 Colera Aviar:
+        Sintomas: 
+        secrecion_nasal,plumas_erizadas,fiebre,diarrea,contracciones_cuello,falta_apetito
+        
+    """
     @Rule(
-        Fact(findDisease="true"),
-        Fact(secrecion_nasal="no"),
+        Fact(findEnfermedad="true"),
+        Fact(secrecion_nasal="si"),
         Fact(secrecion_ocular="no"),
         Fact(jadeo="no"),
         Fact(espasmos="no"),
         Fact(rigidez="no"),
         Fact(tos="no"),
-        Fact(estornudos="si"),
+        Fact(estornudos="no"),
         Fact(plumas_erizadas="si"),
         Fact(fiebre="si"),
-        Fact(diarrea="no"),
+        Fact(diarrea="si"),
         Fact(infeccion_bolsa_fabricio="no"),
-        Fact(contracciones_cuello="no"),
-        Fact(falta_apetito="no"),
+        Fact(contracciones_cuello="si"),
+        Fact(falta_apetito="si"),
         Fact(inflamacion_cara="no"),
         Fact(sensibilidad_luz="no"),
     )
-    def disease_5(self):
-        self.declare(Fact(disease="Colera Aviar"))
+    def Enfermedad_5(self):
+        self.declare(Fact(Enfermedad="Colera Aviar"))
 
-
-    #reglas
-    @Rule(Fact(findDisease="true"), NOT(Fact(disease=W())), salience=-1)
+    # En caso de que no se encuentre una enfermedad a partir de
+    # los sintomas, entonces es deconocida
+    # posteriormente se le asigna una nueva a partir de
+    # la importancia de los sintomas encontrados 
+    # (en caso de haber sintomas)
+    @Rule(Fact(findEnfermedad="true"), NOT(Fact(Enfermedad=W())), salience=-1)
     def unmatched(self):
-        self.declare(Fact(disease="unknown"))
+        self.declare(Fact(Enfermedad="unknown"))
 
-    @Rule(Fact(findDisease="true"), Fact(disease=MATCH.disease), salience=1)
-    def getDisease(self, disease):
+    @Rule(Fact(findEnfermedad="true"), Fact(Enfermedad=MATCH.Enfermedad), salience=1)
+    def getEnfermedad(self, Enfermedad):
 
-        if disease == "unknown":
-            mapDisease = []
-            # agregar sintomas al map
-            mapDisease.append("tos")#sintoma1
-            mapDisease.append("secrecion_nasal")#sintoma2
-            mapDisease.append("secrecion_ocular")#sintoma3
-            mapDisease.append("jadeo")#sintoma4
-            mapDisease.append("espasmos")#sintoma5
-            mapDisease.append("plumas_erizadas")#sintoma6
-            mapDisease.append("rigidez")#sintoma7
-            mapDisease.append("fiebre")#sintoma8
-            mapDisease.append("diarrea")#sintoma9
-            mapDisease.append("estornudos")#sintoma10
-            mapDisease.append("infeccion_bolsa_fabricio")#sintoma11
-            mapDisease.append("contracciones_cuello")#sintoma12
-            mapDisease.append("falta_apetito")#sintoma13
-            mapDisease.append("inflamacion_cara")#sintoma14
-            mapDisease.append("sensibilidad_luz")#sintoma15
-            print("\n\nRevisamos los siguientes sintomas:", mapDisease)
-            mapDisease_val = [
-                self.tos,#sintoma1
-                self.secrecion_nasal,#sintoma2
-                self.secrecion_ocular,#sintoma3
-                self.jadeo,#sintoma4
-                self.espasmos,#sintoma5
-                self.plumas_erizadas,#sintoma6
-                self.rigidez,#sintoma7
-                self.fiebre,#sintoma8
-                self.diarrea,#sintoma9
-                self.estornudos,#sintoma10
-                self.infeccion_bolsa_fabricio,#sintoma11
-                self.contracciones_cuello,#sintoma12
-                self.falta_apetito,#sintoma13
-                self.inflamacion_cara,#sintoma14
-                self.sensibilidad_luz,#sintoma15
+        if Enfermedad == "unknown":
+            mapEnfermedad = []
+            # agregar sintomas al diccionario
+            mapEnfermedad.append("tos")  # sintoma1
+            mapEnfermedad.append("secrecion_nasal")  # sintoma2
+            mapEnfermedad.append("secrecion_ocular")  # sintoma3
+            mapEnfermedad.append("jadeo")  # sintoma4
+            mapEnfermedad.append("espasmos")  # sintoma5
+            mapEnfermedad.append("plumas_erizadas")  # sintoma6
+            mapEnfermedad.append("rigidez")  # sintoma7
+            mapEnfermedad.append("fiebre")  # sintoma8
+            mapEnfermedad.append("diarrea")  # sintoma9
+            mapEnfermedad.append("estornudos")  # sintoma10
+            mapEnfermedad.append("infeccion_bolsa_fabricio")  # sintoma11
+            mapEnfermedad.append("contracciones_cuello")  # sintoma12
+            mapEnfermedad.append("falta_apetito")  # sintoma13
+            mapEnfermedad.append("inflamacion_cara")  # sintoma14
+            mapEnfermedad.append("sensibilidad_luz")  # sintoma15
+            print("\n\nRevisamos los siguientes sintomas:", mapEnfermedad)
+            mapEnfermedad_val = [
+                self.tos,  # sintoma1
+                self.secrecion_nasal,  # sintoma2
+                self.secrecion_ocular,  # sintoma3
+                self.jadeo,  # sintoma4
+                self.espasmos,  # sintoma5
+                self.plumas_erizadas,  # sintoma6
+                self.rigidez,  # sintoma7
+                self.fiebre,  # sintoma8
+                self.diarrea,  # sintoma9
+                self.estornudos,  # sintoma10
+                self.infeccion_bolsa_fabricio,  # sintoma11
+                self.contracciones_cuello,  # sintoma12
+                self.falta_apetito,  # sintoma13
+                self.inflamacion_cara,  # sintoma14
+                self.sensibilidad_luz,  # sintoma15
             ]
-            print("\n\nLos sintomas en el ave son:", mapDisease_val)
+            print("\n\nLos sintomas en el ave son:", mapEnfermedad_val)
 
             # Abrir el archivo que relaciona las enfermedades con los sintomas
             file = open("disease_symptoms.txt", "r")
             contents = file.read()
+            #utiliza la libreria ast para manejar el texto 
+            # (Abstract Syntax Trees)
             dictionary = ast.literal_eval(contents)
             file.close()
 
-            yes_symptoms = []
-            for i in range(0, len(mapDisease_val)):
-                if mapDisease_val[i] == "si":
-                    yes_symptoms.append(mapDisease[i])
+            # guarda los sintomas con 'si' en una nueva lista
+            sintomasEncontrados = []
+            for i in range(0, len(mapEnfermedad_val)):
+                if mapEnfermedad_val[i] == "si":
+                    sintomasEncontrados.append(mapEnfermedad[i])
 
             max_val = 0
-            print("\n\nLos sintomas encontrados son : ", yes_symptoms)
+            print("\n\nLos sintomas encontrados son : ", sintomasEncontrados)
             for key in dictionary.keys():
                 val = dictionary[key].split(",")
                 count = 0
                 print(key, ":", val)
                 for x in val:
-                    if x in yes_symptoms:
+                    if x in sintomasEncontrados:
                         count += 1
                 # print('Count:',count)
                 if count > max_val:
                     max_val = count
-                    pred_dis = key
-
+                    pred_enf = key
+            # si no encuentra sintomas con 'si' entonces está sano
             if max_val == 0:
                 print("No se han encontrado enfermedades. El ave está sana.")
             else:
+                # Al haber sintomas, entonces el ave tiene una enfermedad
+                # Pero en esta situación, no hizo match con ninguna enfermedad
                 print(
                     "\n\nNo podemos decirle con certeza cuál es la enfermedad exacta, pero creemos que padece...",
-                    pred_dis,
+                    pred_enf,
                 )
 
-                print(
-                    "\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-                )
+                print('''
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                     
+                      ''')
 
-                print("\n\nInformación sobre la enfermedad:", pred_dis)
-
-                f = open("disease/disease_descriptions/" + pred_dis + ".txt", "r")
+                print("\n\nInformación sobre la enfermedad:", pred_enf)
+                # abre el archivo txt correpondiente a la enfermedad
+                # donde obtendrá su descripción
+                f = open("disease/disease_descriptions/" + pred_enf + ".txt", "r")
                 print(f.read())
-                print(
-                    "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-                )
+                print('''
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                     
+                      ''')
                 print(
                     "\n\nNo se preocupe",
-                    self.username,
+                    self.nombre_usuario,
                     ". Tenemos algunas sugerencias para usted\n",
                 )
-                f = open("disease/disease_treatments/" + pred_dis + ".txt", "r")
+                # abre el archivo txt correpondiente a la enfermedad
+                # donde obtendrá su tratamiento
+                f = open("disease/disease_treatments/" + pred_enf + ".txt", "r")
                 print(f.read())
-                print(
-                    "\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-                )
+                print('''
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                     
+                      ''')
         else:
-            print("La enfermedad más probable que padezca es:", disease)
+            # Los sintomas son exactos a los de X enfermedad
+            print("La enfermedad más probable que padezca es:", Enfermedad)
             print("\n\n")
-            print(
-                "\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-            )
+            print('''
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                     
+                      ''')
             print("Información sobre la enfermedad:\n")
-            print(disease)
-            f = open("disease/disease_descriptions/" + disease + ".txt", "r")
+            print(Enfermedad)
+            
+            # abre el archivo txt correpondiente a la enfermedad
+            # donde obtendrá su descripción
+            f = open("disease/disease_descriptions/" + Enfermedad + ".txt", "r")
             print(f.read())
-            print(
-                "\n# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-            )
+            print('''
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                     
+                      ''')
             print(
                 "\n\nNo se preocupe",
-                self.username,
+                self.nombre_usuario,
                 ". Tenemos algunas sugerencias para usted\n",
             )
-            f = open("disease/disease_treatments/" + disease + ".txt", "r")
+            # abre el archivo txt correpondiente a la enfermedad
+            # donde obtendrá su tratamiento
+            f = open("disease/disease_treatments/" + Enfermedad + ".txt", "r")
             print(f.read())
-
-    # @Rule(Fact(findDisease = 'true'),
-    # Fact(name=MATCH.name))
-    # def greet(self, name):
-    #     print("Hi!",name, "How is the weather?")
 
 
 if __name__ == "__main__":
