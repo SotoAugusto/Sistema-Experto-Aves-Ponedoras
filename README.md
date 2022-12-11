@@ -1,6 +1,9 @@
 
 ## Demostración
 
+![exec1](images/execution2_1.png)
+![exec2](images/execution2_2.png)
+![exec3](images/execution2_3.png)
 
 
 ## Abstracto
@@ -10,7 +13,7 @@ Los sistemas expertos suelen utilizar conocimientos para razonar sobre los datos
 Las bases de conocimiento y los gráficos siguen desempeñando un papel fundamental en muchos sistemas inteligentes. La gente recorre largas distancias hasta las clínicas o centros médicos, y en la mayoría de ellos escasean los médicos expertos. El resultado es un servicio lento, y los pacientes acaban esperando largas horas sin recibir atención. Por eso, los sistemas médicos expertos pueden desempeñar un papel importante en los casos en los que no se dispone de expertos médicos. Un sistema experto en diagnóstico puede ayudar mucho a identificar esas enfermedades y describir los métodos de tratamiento que deben llevarse a cabo.
 
 
-#### Características:
+### Características:
 
 - Experta (*antes pyknow*), es la libreria de Python que se utiliza como núcleo del proyecto.
 - El motor de inferencias pregunta al usuario síntomas diferentes.
