@@ -1,3 +1,7 @@
+'''
+sudo pip3 install networkx
+sudo pip3 install matplotlib
+'''
 import networkx as nx
 import matplotlib.pyplot as plt # For drawing
 from networkx.algorithms import bipartite
